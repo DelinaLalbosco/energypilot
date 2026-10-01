@@ -1,0 +1,265 @@
+{
+  "household": {
+    "name": "Marek & Ania",
+    "title": "A Silesian Family Home",
+    "description": "Family of four in an older detached house in Katowice with a heat pump. Marek works rotating shifts, Ania works hybrid, Kuba and Zosia go to school."
+  },
+  "location": {
+    "name": "Katowice, Poland",
+    "latitude": 50.26,
+    "longitude": 19.02,
+    "timezone": "Europe/Warsaw"
+  },
+  "currency": "€",
+  "currency_code": "EUR",
+
+  "data": {
+    "history_start": "2025-10-01",
+    "history_end": "yesterday",
+    "history_file": "../data/history.csv",
+    "future_truth_file": "../data/future_truth.csv",
+    "readings_file": "../data/live_readings.csv",
+    "weather_history_file": "../data/weather_history.csv",
+    "weather_forecast_file": "../data/weather_forecast.csv",
+    "pvgis_file": "../data/pvgis_hourly.csv",
+    "model_file": "models/energy_model.pkl",
+    "forecast_file": "output/forecast_7d.csv",
+    "accuracy_file": "output/forecast_accuracy.json",
+    "plan_file": "output/smart_plan.csv",
+    "solar_file": "output/solar_scenarios.csv",
+    "timestamp_column": "timestamp",
+    "total_column": "total_consumption_kwh",
+    "temperature_column": "outdoor_temp_c",
+    "seed": 7
+  },
+
+  "forecast_hours": 24,
+  "horizon_days": [1, 3, 7],
+
+  "members": [
+    { "id": "marek", "name": "Marek", "icon": "👷", "role": "Dad · 3-shift worker", "schedule": "shift", "adult": true },
+    { "id": "ania", "name": "Ania", "icon": "👩‍💻", "role": "Mum · hybrid work", "schedule": "hybrid", "adult": true },
+    { "id": "kuba", "name": "Kuba", "icon": "🧑‍🎓", "role": "Son · 14, secondary school", "schedule": "school", "school_until": 15, "bedtime": 22.5, "adult": false },
+    { "id": "zosia", "name": "Zosia", "icon": "👧", "role": "Daughter · 10, primary school", "schedule": "school", "school_until": 14, "bedtime": 21.5, "adult": false }
+  ],
+
+  "calendar": {
+    "shift": {
+      "rotation": ["morning", "afternoon", "night"],
+      "rotation_start": "2025-09-29",
+      "types": {
+        "morning": { "away": [6, 15], "wake": 4.75, "sleep": 22 },
+        "afternoon": { "away": [14, 23], "wake": 7.5, "sleep": 0.5 },
+        "night": { "away": [22, 7], "wake": 14, "sleep": 7, "rest_start": 7 }
+      },
+      "saturday_shift_probability": 0.25
+    },
+    "hybrid": { "office_away": [8, 17], "home_office_weekdays": [1, 3], "extra_home_office_probability": 0.25, "wake": 6.25, "sleep": 23 },
+    "school": { "away_from": 8, "wake_school_day": 6.5, "wake_free_day": 8.5 },
+    "activities": [
+      { "member": "kuba", "weekdays": [0, 2], "away": [16, 18], "label": "football training" },
+      { "member": "zosia", "weekdays": [1, 4], "away": [16, 18], "label": "dance class" }
+    ],
+    "public_holidays": [
+      "2025-11-01", "2025-11-11", "2025-12-24", "2025-12-25", "2025-12-26", "2026-01-01", "2026-01-06",
+      "2026-04-05", "2026-04-06", "2026-05-01", "2026-05-03", "2026-05-24", "2026-06-04", "2026-08-15", "2026-11-01", "2026-11-11"
+    ],
+    "school_breaks": [
+      ["2025-12-22", "2025-12-31"],
+      ["2026-02-02", "2026-02-15"],
+      ["2026-04-02", "2026-04-07"],
+      ["2026-06-27", "2026-08-31"]
+    ],
+    "unplanned": {
+      "weekend_family_outing_probability": 0.35,
+      "outing_hours": [10, 17],
+      "outing_length_hours": [3, 6],
+      "evening_out_probability": 0.06,
+      "sick_day_probability": 0.02,
+      "family_trip_probability_per_weekend": 0.06
+    }
+  },
+
+  "meals": [
+    { "id": "breakfast", "when": "wake", "needs": "any", "uses": {
+      "kettle_kwh": { "probability": 0.9, "kw": [2.0, 2.0], "minutes": [3, 5], "per_person": 0.6 },
+      "coffee_machine_kwh": { "probability": 0.85, "kw": [1.0, 1.5], "minutes": [5, 10], "per_adult": 1 },
+      "hob_kwh": { "probability": 0.3, "kw": [1.5, 2.5], "minutes": [8, 15] } } },
+    { "id": "lunch", "hours": [12, 14], "needs": "adult", "uses": {
+      "hob_kwh": { "probability": 0.6, "kw": [1.5, 3.0], "minutes": [15, 30] },
+      "kettle_kwh": { "probability": 0.5, "kw": [2.0, 2.0], "minutes": [3, 5] },
+      "coffee_machine_kwh": { "probability": 0.5, "kw": [1.0, 1.5], "minutes": [5, 8] } } },
+    { "id": "snack", "hours": [15, 17], "needs": "kids", "uses": {
+      "kettle_kwh": { "probability": 0.35, "kw": [2.0, 2.0], "minutes": [3, 5] },
+      "oven_kwh": { "probability": 0.08, "kw": [2.0, 2.5], "minutes": [15, 25] } } },
+    { "id": "dinner", "hours": [17.5, 19.5], "needs": "adult", "shift_minutes": 45, "uses": {
+      "hob_kwh": { "probability": 0.85, "kw": [1.5, 3.5], "minutes": [25, 50] },
+      "oven_kwh": { "probability": 0.45, "kw": [2.0, 2.5], "minutes": [35, 70] },
+      "kettle_kwh": { "probability": 0.45, "kw": [2.0, 2.0], "minutes": [3, 5] } } },
+    { "id": "late_meal", "when": "shift_return", "needs": "marek", "uses": {
+      "kettle_kwh": { "probability": 0.8, "kw": [2.0, 2.0], "minutes": [3, 5] },
+      "hob_kwh": { "probability": 0.35, "kw": [1.5, 2.5], "minutes": [10, 15] },
+      "coffee_machine_kwh": { "probability": 0.3, "kw": [1.0, 1.5], "minutes": [5, 8] } } }
+  ],
+
+  "rooms": [
+    { "id": "living", "label": "Living room" },
+    { "id": "kitchen", "label": "Kitchen" },
+    { "id": "kids", "label": "Kids' room" },
+    { "id": "office", "label": "Office & bedroom" },
+    { "id": "utility", "label": "Utility · heat pump" }
+  ],
+
+  "appliances": [
+    { "id": "heat_pump_kwh", "name": "Heat pump", "room": "utility", "color": "#ff7a59",
+      "profile": { "type": "heat_pump" },
+      "brief": "1.5–3.5 kW during operation" },
+    { "id": "refrigerator_kwh", "name": "Refrigerator", "room": "kitchen", "color": "#38bdf8", "always_on": true,
+      "profile": { "type": "always_on", "kwh_per_day": [0.8, 1.2] }, "brief": "0.8–1.2 kWh/day" },
+    { "id": "kettle_kwh", "name": "Kettle", "room": "kitchen", "color": "#f43f5e",
+      "profile": { "type": "meal" }, "brief": "2.0 kW, 3–5 min/use",
+      "peak_tip": "Boil only the water you need — the kettle draws 2 kW." },
+    { "id": "coffee_machine_kwh", "name": "Coffee machine", "room": "kitchen", "color": "#b08968",
+      "profile": { "type": "meal" }, "brief": "1.0–1.5 kW, 5–10 min/use" },
+    { "id": "oven_kwh", "name": "Oven", "room": "kitchen", "color": "#fb923c",
+      "profile": { "type": "meal" }, "brief": "2.0–2.5 kW during operation",
+      "peak_tip": "Oven dinners in the 17–22 peak cost 43% more than before 17:00 — batch-cook at the weekend or use residual heat." },
+    { "id": "hob_kwh", "name": "Induction hob", "room": "kitchen", "color": "#a78bfa",
+      "profile": { "type": "meal" }, "brief": "1.5–3.5 kW depending on use",
+      "peak_tip": "Lids on pots and the right-size zone cut hob energy by about a quarter." },
+    { "id": "washing_machine_kwh", "name": "Washing machine", "room": "utility", "color": "#2dd4bf",
+      "flexible": { "window": [4, 17], "label": "delay-start: finish by morning or run before 17:00" },
+      "profile": { "type": "cycle", "kwh": [0.6, 1.0], "heater_kw": 2.0, "heater_minutes": [10, 20], "per_week": 4.5, "hours": [[6, 8], [9, 13], [17, 21]], "needs": "adult" },
+      "brief": "0.6–1.0 kWh/cycle" },
+    { "id": "dishwasher_kwh", "name": "Dishwasher", "room": "kitchen", "color": "#818cf8",
+      "flexible": { "window": [21, 7], "label": "after dinner, delay-start into the night (€0.18 from 00:00)" },
+      "profile": { "type": "cycle", "kwh": [0.8, 1.2], "heater_kw": 1.8, "heater_minutes": [15, 25], "per_week": 6, "hours": [[19, 22]], "needs": "adult" },
+      "brief": "0.8–1.2 kWh/cycle" },
+    { "id": "tv_kwh", "name": "Television", "room": "living", "color": "#facc15",
+      "profile": { "type": "session", "kw": [0.08, 0.15], "users": "any", "hours": [[17, 23]], "probability": 0.75, "daytime_probability": 0.25 },
+      "brief": "0.08–0.15 kW during operation" },
+    { "id": "gaming_console_kwh", "name": "Gaming console", "room": "kids", "color": "#f472b6",
+      "profile": { "type": "session", "kw": [0.10, 0.20], "users": ["kuba", "zosia"], "hours": [[15, 21]], "probability": 0.35, "weekend_hours": [[10, 21]], "weekend_probability": 0.45 },
+      "brief": "0.10–0.20 kW during operation",
+      "peak_tip": "Gaming and TV together at the peak — one screen at a time saves a little." },
+    { "id": "desktop_computer_kwh", "name": "Desktop computer", "room": "kids", "color": "#4ade80",
+      "profile": { "type": "session", "kw": [0.10, 0.30], "users": ["kuba"], "hours": [[15, 22]], "probability": 0.5, "weekend_hours": [[10, 22]], "weekend_probability": 0.45 },
+      "brief": "0.10–0.30 kW during operation" },
+    { "id": "laptop_kwh", "name": "Laptop", "room": "office", "color": "#a3e635",
+      "profile": { "type": "session", "kw": [0.04, 0.08], "users": ["ania", "zosia"], "hours": [[18, 22]], "probability": 0.4, "work_from_home": [8, 16] },
+      "brief": "0.04–0.08 kW during operation" },
+    { "id": "wifi_router_kwh", "name": "Wi-Fi router", "room": "office", "color": "#94a3b8", "always_on": true,
+      "profile": { "type": "always_on", "kw": [0.008, 0.015] }, "brief": "0.008–0.015 kW continuous" },
+    { "id": "lighting_kwh", "name": "Lighting", "room": "living", "color": "#fde047",
+      "profile": { "type": "lighting", "kw": [0.08, 0.20], "dark_below_w_m2": 20 }, "brief": "0.08–0.20 kW total when active" },
+    { "id": "charging_kwh", "name": "Phone & tablet charging", "room": "office", "color": "#67e8f9",
+      "profile": { "type": "charging", "kwh_per_charge": [0.005, 0.02], "devices_per_person": 1.5, "hours": [[6, 8], [16, 23]] },
+      "brief": "0.005–0.02 kWh/device per charge" },
+    { "id": "standby_kwh", "name": "Standby devices", "room": "living", "color": "#cbd5e1", "always_on": true,
+      "profile": { "type": "always_on", "kw": [0.03, 0.07] }, "brief": "0.03–0.07 kW combined" }
+  ],
+
+  "tariff": {
+    "note": "HackoWatt common tariff: €0.18 (00–06), €0.28 (06–17), €0.40 (17–22), €0.28 (22–24)",
+    "hourly_price": [0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.28, 0.28, 0.28, 0.28, 0.28, 0.28, 0.28, 0.28, 0.28, 0.28, 0.28, 0.40, 0.40, 0.40, 0.40, 0.40, 0.28, 0.28]
+  },
+
+  "heating": {
+    "enabled": true,
+    "appliance": "heat_pump_kwh",
+    "type": "air-to-water heat pump",
+    "heat_loss_kw_per_c": 0.25,
+    "thermal_capacity_kwh_per_c": 8.0,
+    "cop": { "at_7c": 3.6, "at_minus_7c": 2.4, "min": 1.8, "max": 4.5 },
+    "min_run_kw": 1.5,
+    "max_kw": 3.5,
+    "setpoint_day": 21.0,
+    "setpoint_night": 19.5,
+    "setpoint_empty": 20.0,
+    "heating_limit_c": 15.0,
+    "heating_limit_band_c": 4.0,
+    "internal_gain_kw_per_person": 0.08,
+    "solar_gain_factor": 0.0015,
+    "comfort_temp": 21.0,
+    "day_min": 20.5,
+    "day_max": 22.0,
+    "night_min": 19.0,
+    "night_max": 21.5,
+    "night_hours": [22, 23, 0, 1, 2, 3, 4, 5],
+    "loss_kw_per_c": 0.09,
+    "capacity_kwh_per_c": 2.5,
+    "comfort_levels": [
+      { "id": "warm", "label": "Warmest", "day_min": 21.0, "day_max": 22.0, "night_min": 19.5, "night_max": 21.5 },
+      { "id": "standard", "label": "Comfort", "day_min": 20.5, "day_max": 22.0, "night_min": 19.0, "night_max": 21.5 },
+      { "id": "balanced", "label": "Balanced", "day_min": 20.0, "day_max": 22.5, "night_min": 18.5, "night_max": 22.0 },
+      { "id": "saver", "label": "Cheapest", "day_min": 19.5, "day_max": 23.0, "night_min": 18.0, "night_max": 22.5 }
+    ],
+    "default_comfort": "standard"
+  },
+
+  "co2_kg_per_kwh": 0.66,
+
+  "optimizer": { "peak_weight": 0.2, "comfort_weight": 0.001 },
+
+  "model": {
+    "backtest_weeks": 4,
+    "backtest_season_weeks": ["2025-12-08", "2026-01-19", "2026-02-23", "2026-04-13"],
+    "candidates": ["seasonal_naive", "ridge", "hist_gbm", "xgboost_direct", "xgboost_recursive", "ensemble", "lstm", "gru"],
+    "no_underprediction_quantile": 0.8,
+    "upper_quantile": 0.9
+  },
+
+  "solar": {
+    "latitude": 50.26,
+    "longitude": 19.02,
+    "tilt": 35,
+    "azimuth": 0,
+    "system_loss_pct": 14,
+    "yield_kwh_per_kwp": 1072,
+    "options_kwp": [0, 3, 5, 8, 10],
+    "simulator_kwp": { "max": 15, "step": 0.5 },
+    "default_kwp": 5,
+    "install_cost_per_kwp": 1300,
+    "feed_in_price": 0.08,
+    "annual_opex_pct": 1.0
+  },
+
+  "assumptions": [
+    { "topic": "Household & schedules", "items": [
+      "Marek works a 3-shift rota that rotates every week: morning (06–14, away 06–15), afternoon (14–22, away 14–23), night (22–06, away 22–07, sleeps 07–14). Mon–Fri, plus a Saturday shift on 1 in 4 weekends.",
+      "Ania works from home every Tuesday and Thursday and on 25% of the other weekdays; office days she is away 08–17.",
+      "Kuba (14) is at school 08–15 and Zosia (10) 08–14 on school days. Kuba has football Mon/Wed 16–18, Zosia dance Tue/Fri 16–18.",
+      "School breaks: 22–31 Dec, 2–15 Feb (Silesian winter break), 2–7 Apr (Easter), 27 Jun–31 Aug. Polish public holidays incl. 24 Dec (new since 2025).",
+      "Unplanned events the forecast cannot know: weekend family outings (35% of weekend days, 3–6 h), evenings out, sick days, occasional weekend trips."
+    ] },
+    { "topic": "Appliances", "items": [
+      "Power and energy per use are drawn uniformly from the ranges in the brief (e.g. kettle 2 kW × 3–5 min, hob 1.5–3.5 kW).",
+      "Cooking follows meals: breakfast at each person's wake-up time, lunch when an adult is home, kids' snack after school, dinner 17:30–19:30 (± 45 min), and a late meal after Marek's shift.",
+      "Screens run only when their users are at home and awake; Ania's laptop runs through her home-office hours.",
+      "Washing machine ≈ 4.5 cycles/week, dishwasher ≈ 6 cycles/week, both started only when an adult is home.",
+      "Lighting is on when people are awake at home and the real solar radiation is below 20 W/m² (dark)."
+    ] },
+    { "topic": "Heating", "items": [
+      "Air-to-water heat pump; older house heat loss 0.25 kW per °C (thermal). COP falls from 3.6 at 7 °C to 2.4 at −7 °C.",
+      "Setpoints 21 °C day, 19.5 °C night (22–06), 20 °C when nobody is home; heating fades out as the average outdoor temperature of the last 24 hours rises from 13 °C (full heating) to 17 °C (off), like a weather-compensated heat pump in spring and autumn.",
+      "Electric power 1.5–3.5 kW while running (brief); a smaller need means the heat pump cycles on and off within the hour.",
+      "Internal gains 80 W per person at home; solar gains from real radiation. No domestic hot water in the heat pump (not in the brief)."
+    ] },
+    { "topic": "Weather & data", "items": [
+      "Real hourly weather for Katowice (50.26 °N, 19.02 °E) from Open-Meteo: archive for the history, forecast API for the next 7 days.",
+      "The historical profile is simulated hour by hour from the schedules above and the real weather, 1 Oct 2025 → yesterday (≈ 1 year, well above the 30-day minimum).",
+      "Times are local (Europe/Warsaw); on daylight-saving changes the missing or doubled hour is interpolated so every day has 24 hours."
+    ] },
+    { "topic": "Tariff, solar & costs", "items": [
+      "HackoWatt common tariff €0.18 / €0.28 / €0.40 / €0.28 per kWh; export €0.08/kWh; PV €1,300 per kWp; PV running cost 1% of the investment per year.",
+      "PV production from JRC PVGIS for Katowice: south-facing, 35° tilt, 14% system loss, 2019–2023 hourly average → 1,072 kWh per kWp per year. Next-days PV from the Open-Meteo radiation forecast on the same tilted plane.",
+      "Payback = investment ÷ (yearly bill saving + export income − 1% running cost). Scenario B also moves the washing machine and dishwasher to the best hour of their window."
+    ] },
+    { "topic": "Forecast & optimisation", "items": [
+      "The forecast knows the planned calendar (shifts, home-office days, school, holidays) and the weather forecast — not the unplanned events.",
+      "8 models (incl. LSTM and GRU neural networks) are compared on 8 test weeks (winter, spring and the 4 latest weeks), each trained only on the data before its week; the most accurate one is used. It is calibrated so that at most 1 in 5 days is under-predicted, and a likely range (10–90 %) is shown.",
+      "Online learning: when smart-meter readings are available, every complete day is added to the history, the model is re-trained on all data and the calibration is refreshed (update_model.py). No real meter is connected in this demo.",
+      "The optimiser only moves the washing machine, the dishwasher and heat-pump timing (pre-heating the house before the €0.40 peak); comfort stays inside the chosen band."
+    ] }
+  ]
+}
